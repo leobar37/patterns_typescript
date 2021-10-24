@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto, { Cipher } from 'crypto';
 interface DataSource {
   writeData(data: string): void;
   readData(): string;
@@ -15,7 +15,7 @@ type IConfig = {
  */
 class Encryption {
   private config: IConfig = {
-    algorithm: 'AES-128-CBC',
+    algorithm: 'aes-128-ccm',
     iv: crypto.createHash('sha256').update('hashedIV').digest(),
     key: 'myEncriptKey'
   };
@@ -24,7 +24,15 @@ class Encryption {
     this.config = config;
   }
   // you can see the list of hash types by typing  openssl list -cipher-algorithm
-  encript(data: string) {}
+  encript(data: string) {
+    const key = crypto.createHash('sha256').update(this.config.key).digest();
+    let cipher = crypto.createCipheriv(
+      this.config.algorithm,
+      key,
+      this.config.iv
+    );
+    return cipher.update(data, 'binary', 'hex');
+  }
   decrypt(data: string) {}
 }
 
