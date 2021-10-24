@@ -7,7 +7,7 @@
     "build:dev": "webpack --mode development",
     "build": "webpack --mode production",
     "lint": "eslint src/* --ext .ts",
-    "dev": "nodemon src/observer/events.ts --exec ts-node",
+    "dev": "nodemon src/decorator/second.ts --exec ts-node",
     "start": "node dist/index.js"
   },
   "author": "Leobar37 <usatloqueando@gmail.com>",

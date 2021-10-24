@@ -1,36 +1,16 @@
-import crypto from 'crypto';
 interface DataSource {
   writeData(data: string): void;
   readData(): string;
 }
 
-type IConfig = {
-  algorithm: string;
-  key: string;
-  iv: Buffer | null;
-};
-
-/**
- * @see https://nodejs.org/en/knowledge/cryptography/how-to-use-crypto-module/
- */
-class Encryption {
-  private config: IConfig = {
-    algorithm: 'AES-128-CBC',
-    iv: crypto.createHash('sha256').update('hashedIV').digest(),
-    key: 'myEncriptKey'
-  };
-
-  constructor(config: IConfig) {
-    this.config = config;
-  }
-  // you can see the list of hash types by typing  openssl list -cipher-algorithm
-  encript(data: string) {}
-  decrypt(data: string) {}
-}
-
 class FileDataSource implements DataSource {
-  writeData(data: string): void {}
-  readData(): string {}
+  data: string;
+  writeData(data: string): void {
+    this.data = data;
+  }
+  readData(): string {
+    return this.data;
+  }
 }
 
 class DataSourceDecorator implements DataSource {
@@ -48,10 +28,21 @@ class DataSourceDecorator implements DataSource {
 
 class EncryptDataSource extends DataSourceDecorator {
   readData() {
-    return super.readData();
+    const data = super.readData();
+    return this.decryptData(data);
+  }
+  decryptData(data: string) {
+    return data.replace('encrypt:', '');
   }
   encryptData(data: string) {
-    // return data. ;
+    return `encrypt:${data}`;
   }
-  writeData(data: string) {}
+  writeData(data: string) {
+    const res = this.encryptData(data);
+    super.writeData(res);
+  }
 }
+
+const datasSource = new FileDataSource();
+
+const ecryptData = new EncryptDataSource(datasSource);
