@@ -17,20 +17,20 @@ export class Subject<T> implements ISubject<T> {
   }
 }
 
-const obs = new Subject<string>();
+// const obs = new Subject<string>();
 
-obs.next('hello');
+// obs.next('hello');
 
-obs.suscribe(d => {
-  console.log('suscriber 1');
-  console.log(d);
-});
+// obs.suscribe(d => {
+//   console.log('suscriber 1');
+//   console.log(d);
+// });
 
-obs.next('World');
+// obs.next('World');
 
-obs.suscribe(d => {
-  console.log('suscriber 2');
-  console.log(d);
-});
+// obs.suscribe(d => {
+//   console.log('suscriber 2');
+//   console.log(d);
+// });
 
-obs.next('bye');
+// obs.next('bye');

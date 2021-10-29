@@ -7,7 +7,7 @@ interface IEventEmmiter<T> {
 }
 type Listeners<T> = Array<Listener<T>>;
 
-class EventEmmiter<T> implements IEventEmmiter<T> {
+export class EventEmmiter<T> implements IEventEmmiter<T> {
   private listenersManager = new Map<string, Listeners<T>>();
   private onlyOnce = new Set<Listener<T>>();
   constructor() {}
@@ -41,23 +41,3 @@ class EventEmmiter<T> implements IEventEmmiter<T> {
     this.listenersManager = new Map();
   }
 }
-
-const emmiter = new EventEmmiter<string>();
-
-emmiter.on('hello', name => {
-  console.log('sub 1');
-  console.log('Hello ' + name);
-});
-
-emmiter.once('hello', name => {
-  console.log('sub  4 (once)');
-  console.log('Hello ' + name);
-});
-let cont = 0;
-setInterval(() => {
-  emmiter.emit('hello', 'Leobar' + cont);
-  if (cont == 5) {
-    emmiter.removeEventListeners();
-  }
-  cont++;
-}, 1000);

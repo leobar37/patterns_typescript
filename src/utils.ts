@@ -18,7 +18,7 @@ const handleSizeArr =
 export function assertProps<T>(arr: T[]) {
   return ({ limit, skip, ...props }: PartialAssert<T>) => {
     if (allPropsAreEmpty(props)) return arr;
-    return handleSizeArr(arr)(skip, limit).filter((can: any) => {
+    return handleSizeArr(arr)(skip as any, limit as any).filter((can: any) => {
       return Object.keys(props).every((d: any) => {
         const safeProps: any = props;
         if (typeof safeProps[d] == 'function') {
@@ -29,3 +29,20 @@ export function assertProps<T>(arr: T[]) {
     });
   };
 }
+export const memoize = (func: Function) => {
+  // a cache of results
+  const results = {} as any;
+  // return a function for the cache of results
+  return (...args: any[]) => {
+    // a JSON key to save the results cache
+    const argsKey = JSON.stringify(args);
+    // execute `func` only if there is no cached value of clumsysquare()
+    if (!results[argsKey]) {
+      // store the return value of clumsysquare()
+      results[argsKey] = func(...args);
+    }
+    console.log('returned from caché');
+    // return the cached results
+    return results[argsKey];
+  };
+};
